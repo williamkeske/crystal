@@ -446,7 +446,7 @@ void Npc::onPlayerSellAllLoot(uint32_t playerId, uint16_t itemId, bool ignore, u
 		return;
 	}
 
-	if (itemId == ITEM_LOOT_POUCH) {
+	if (itemId == ITEM_GOLD_POUCH) {
 		const auto &owner = player->getShopOwner();
 		if (!owner || owner.get() != this) {
 			return;
