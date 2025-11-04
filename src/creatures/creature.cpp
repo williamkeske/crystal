@@ -524,6 +524,11 @@ void Creature::onDeath() {
 			lastHitUnjustified = killerPlayer->onKilledPlayer(getPlayer(), true);
 			lastHitCreatureMaster = lastHitCreature->getMaster();
 		}
+		
+		if (getZoneType() == ZONE_PVP) { // tibia drome death adjustment
+			setDropLoot(false);
+			setSkillLoss(false);
+		}
 	} else {
 		lastHitCreatureMaster = nullptr;
 	}
