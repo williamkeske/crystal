@@ -193,7 +193,8 @@ int PositionFunctions::luaPositionSendMagicEffect(lua_State* L) {
 	}
 
 	MagicEffectClasses magicEffect = Lua::getNumber<MagicEffectClasses>(L, 2);
-	if (g_configManager().getBoolean(WARN_UNSAFE_SCRIPTS) && !g_game().isMagicEffectRegistered(magicEffect)) {
+	// if (g_configManager().getBoolean(WARN_UNSAFE_SCRIPTS) && !g_game().isMagicEffectRegistered(magicEffect)) {
+	if (magicEffect != MagicEffectClasses::CONST_ME_NONE && g_configManager().getBoolean(WARN_UNSAFE_SCRIPTS) && !g_game().isMagicEffectRegistered(magicEffect)) {
 		g_logger().warn("[PositionFunctions::luaPositionSendMagicEffect] An unregistered magic effect type with id '{}' was blocked to prevent client crash.", fmt::underlying(magicEffect));
 		Lua::pushBoolean(L, false);
 		return 1;
