@@ -5855,8 +5855,8 @@ void Game::playerQuickLoot(uint32_t playerId, const Position &pos, uint16_t item
 
 	// Premium restriction
 	/* if (!player->isPremium()) {
-		player->sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT);
-		return;
+	    player->sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT);
+	    return;
 	} */
 
 	// Handle action delay if not auto-loot
