@@ -313,7 +313,7 @@ void Weapon::internalUseWeapon(const std::shared_ptr<Player> &player, const std:
 		player->sendCreatureSquare(target, SQ_PLAYER_ATTACK, static_cast<SquareColor_t>(markWeaponType(getWeaponAttackEffect(item, player))));
 		// const uint16_t attackEffect = getWeaponAttackEffect(item, player);
 		// if (attackEffect != CONST_ME_NONE) {
-			// player->sendCreatureSquare(target, SQ_PLAYER_ATTACK, static_cast<SquareColor_t>(markWeaponType(attackEffect)));
+		// player->sendCreatureSquare(target, SQ_PLAYER_ATTACK, static_cast<SquareColor_t>(markWeaponType(attackEffect)));
 		// }
 	}
 
