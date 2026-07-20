@@ -1333,7 +1333,6 @@ bool ConditionRegeneration::executeCondition(const std::shared_ptr<Creature> &cr
 
 	if (const auto &player = creature->getPlayer()) {
 		player->sendStats();
-	}
 
 	const auto &player = creature->getPlayer();
 	int32_t dailyStreak = 0;
