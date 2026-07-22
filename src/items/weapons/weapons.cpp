@@ -280,8 +280,7 @@ uint16_t Weapon::getWeaponAttackEffect(const std::shared_ptr<Item> &item, const 
 		return it.meleeAttackEffect;
 	}
 
-	// switch (item->getWeaponType()) {
-	switch (it.weaponType) {
+	switch (item->getWeaponType()) {
 		case WEAPON_SWORD:
 			return CONST_ME_SWORD_ATTACK;
 
