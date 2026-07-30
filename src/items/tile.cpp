@@ -1164,7 +1164,6 @@ void Tile::addThing(int32_t index, const std::shared_ptr<Thing> &thing) {
 					index = maxIndex;
 				}
 
-				auto end = items->getEndDownItem();
 				index = std::clamp(index, 0, static_cast<int32_t>(items->getDownItemCount()));
 				items->insert(end - index, item);
 			}
