@@ -71,6 +71,7 @@ void GameFunctions::init(lua_State* L) {
 	Lua::registerMethod(L, "Game", "getReturnMessage", GameFunctions::luaGameGetReturnMessage);
 
 	Lua::registerMethod(L, "Game", "createItem", GameFunctions::luaGameCreateItem);
+	Lua::registerMethod(L, "Game", "createItemEx", GameFunctions::luaGameCreateItemEx);
 	Lua::registerMethod(L, "Game", "createContainer", GameFunctions::luaGameCreateContainer);
 	Lua::registerMethod(L, "Game", "createMonster", GameFunctions::luaGameCreateMonster);
 	Lua::registerMethod(L, "Game", "createSoulPitMonster", GameFunctions::luaGameCreateSoulPitMonster);
