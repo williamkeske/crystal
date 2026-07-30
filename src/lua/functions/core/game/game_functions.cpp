@@ -579,6 +579,49 @@ int GameFunctions::luaGameCreateItem(lua_State* L) {
 	return 1;
 }
 
+int GameFunctions::luaGameCreateItemEx(lua_State* L) {
+	// Game.createItemEx(itemId, count, position, stackPos)
+
+	uint16_t itemId;
+	if (Lua::isNumber(L, 1)) {
+		itemId = Lua::getNumber<uint16_t>(L, 1);
+	} else {
+		itemId = Item::items.getItemIdByName(Lua::getString(L, 1));
+		if (itemId == 0) {
+			lua_pushnil(L);
+			return 1;
+		}
+	}
+
+	const auto count = Lua::getNumber<int32_t>(L, 2, 1);
+	const Position position = Lua::getPosition(L, 3);
+	const int32_t stackPos = Lua::getNumber<int32_t>(L, 4, INDEX_WHEREEVER);
+
+	const auto item = Item::CreateItem(itemId, count);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const auto tile = g_game().map.getTile(position);
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	ReturnValue ret = g_game().internalAddItem(tile, item, stackPos, FLAG_NOLIMIT);
+
+	if (ret != RETURNVALUE_NOERROR) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Lua::pushUserdata<Item>(L, item);
+	Lua::setItemMetatable(L, -1, item);
+
+	return 1;
+}
+
 int GameFunctions::luaGameCreateContainer(lua_State* L) {
 	// Game.createContainer(itemId, size[, position])
 	const uint16_t size = Lua::getNumber<uint16_t>(L, 2);
