@@ -51,7 +51,6 @@ private:
 	static int luaGameGetReturnMessage(lua_State* L);
 
 	static int luaGameCreateItem(lua_State* L);
-	static int luaGameCreateItemEx(lua_State* L);
 	static int luaGameCreateContainer(lua_State* L);
 	static int luaGameCreateMonster(lua_State* L);
 	static int luaGameCreateSoulPitMonster(lua_State* L);
