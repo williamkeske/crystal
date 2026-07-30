@@ -1144,30 +1144,8 @@ void Tile::addThing(int32_t index, const std::shared_ptr<Thing> &thing) {
 				item->setID(ITEM_WATERBALL);
 			}
 
-			if (!items) {
-				items = makeItemList();
-			}
-
-			if (index == INDEX_WHEREEVER) {
-				items->insert(items->getBeginDownItem(), item);
-			} else {
-				auto begin = items->getBeginDownItem();
-				auto end = items->getEndDownItem();
-
-				int32_t maxIndex = static_cast<int32_t>(std::distance(begin, end));
-
-				if (index < 0) {
-					index = 0;
-				}
-
-				if (index > maxIndex) {
-					index = maxIndex;
-				}
-
-				index = std::clamp(index, 0, static_cast<int32_t>(items->getDownItemCount()));
-				items->insert(end - index, item);
-			}
-
+			items = makeItemList();
+			items->insert(items->getBeginDownItem(), item);
 			items->increaseDownItemCount();
 			onAddTileItem(item);
 		}
