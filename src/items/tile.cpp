@@ -1035,7 +1035,7 @@ void Tile::addThing(const std::shared_ptr<Thing> &thing) {
 	addThing(0, thing);
 }
 
-void Tile::addThing(int32_t, const std::shared_ptr<Thing> &thing) {
+void Tile::addThing(int32_t index, const std::shared_ptr<Thing> &thing) {
 	if (!thing) {
 		return; // RETURNVALUE_NOTPOSSIBLE
 	}
@@ -1145,7 +1145,26 @@ void Tile::addThing(int32_t, const std::shared_ptr<Thing> &thing) {
 			}
 
 			items = makeItemList();
-			items->insert(items->getBeginDownItem(), item);
+
+			if (index == INDEX_WHEREEVER) {
+				items->insert(items->getBeginDownItem(), item);
+			} else {
+				auto begin = items->getBeginDownItem();
+				auto end = items->getEndDownItem();
+
+				int32_t maxIndex = static_cast<int32_t>(std::distance(begin, end));
+
+				if (index < 0) {
+					index = 0;
+				}
+
+				if (index > maxIndex) {
+					index = maxIndex;
+				}
+
+				items->insert(begin + index, item);
+			}
+
 			items->increaseDownItemCount();
 			onAddTileItem(item);
 		}
