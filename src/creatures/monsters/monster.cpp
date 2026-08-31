@@ -1020,6 +1020,11 @@ bool Monster::selectTarget(const std::shared_ptr<Creature> &creature) {
 		// Target not found in our target list.
 		return false;
 	}
+	
+	// Passive monsters should neither attack nor follow targets.
+	if (!isHostile() && !isSummon()) {
+		return false;
+	}
 
 	if (isHostile() || isSummon()) {
 		if (setAttackedCreature(creature)) {
