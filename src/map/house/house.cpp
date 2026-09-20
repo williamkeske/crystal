@@ -44,7 +44,7 @@ void House::setNewOwnerGuid(int32_t newOwnerGuid, bool serverStartup) {
 		return;
 	}
 
-	std::string query = fmt::format("UPDATE `houses` SET `new_owner` = {} WHERE `id` = {} AND `world_id` = {}", newOwnerGuid, id, g_game().worlds().getCurrentWorld()->id);
+	std::string query = fmt::format("UPDATE `houses` SET `new_owner` = {} WHERE `id` = {} AND `world_id` = {}", newOwnerGuid, id, static_cast<uint32_t>(g_game().worlds().getCurrentWorld()->id));
 
 	Database &db = Database::getInstance();
 	db.executeQuery(query);
