@@ -44,7 +44,7 @@ void House::setNewOwnerGuid(int32_t newOwnerGuid, bool serverStartup) {
 		return;
 	}
 
-	std::string query = fmt::format("UPDATE `houses` SET `new_owner` = {} WHERE `id` = {} AND `world_id` = {}", newOwnerGuid, id, static_cast<uint32_t>(g_game().worlds().getCurrentWorld()->id));
+	std::string query = fmt::format("UPDATE `houses` SET `new_owner` = {} WHERE `id` = {} AND `world_id` = {}", newOwnerGuid, id, g_game().worlds().getCurrentWorld()->id);
 
 	Database &db = Database::getInstance();
 	db.executeQuery(query);
@@ -98,14 +98,16 @@ bool House::tryTransferOwnership(const std::shared_ptr<Player> &player, bool ser
 }
 
 void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, const std::shared_ptr<Player> &player /* = nullptr*/) {
-	const auto worldId = static_cast<uint32_t>(g_game().worlds().getCurrentWorld()->id);
+	const auto worldId = g_game().worlds().getCurrentWorld()->id;
 
 	if (updateDatabase && owner != guid) {
 		Database &db = Database::getInstance();
 
-		std::ostringstream query;
-		query << "UPDATE `houses` SET `owner` = " << guid << ", `new_owner` = -1, `paid` = 0, `bidder` = 0, `bidder_name` = '', `highest_bid` = 0, `internal_bid` = 0, `bid_end_date` = 0, `state` = " << (guid > 0 ? 2 : 0) << " WHERE `id` = " << id << " AND `world_id` = " << worldId;
-		db.executeQuery(query.str());
+		const std::string query = fmt::format(
+			"UPDATE `houses` SET `owner` = {}, `new_owner` = -1, `paid` = 0, `bidder` = 0, `bidder_name` = '', `highest_bid` = 0, `internal_bid` = 0, `bid_end_date` = 0, `state` = {} WHERE `id` = {} AND `world_id` = {}",
+			guid, guid > 0 ? 2 : 0, id, worldId
+		);
+		db.executeQuery(query);
 	}
 
 	if (isLoaded && owner == guid) {

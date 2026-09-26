@@ -2133,19 +2133,19 @@ ReturnValue Game::checkMoveItemToCylinder(const std::shared_ptr<Player> &player,
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const auto fromContainer = fromCylinder->getContainer();
-	const bool fromStoreInbox = fromContainer && fromContainer->getRootContainer() && fromContainer->getRootContainer()->isStoreInbox();
-
 	if (std::shared_ptr<Container> toCylinderContainer = toCylinder->getContainer()) {
 		auto containerID = toCylinderContainer->getID();
 		const auto rootToContainer = toCylinderContainer->getRootContainer();
 		const bool toStoreInbox = rootToContainer && rootToContainer->isStoreInbox();
 
-		// check the store inbox index if gold pouch forces it as containerID
+		// check the store inbox index if gold/loot pouch forces it as containerID
 		if (containerID == ITEM_STORE_INBOX) {
 			auto cylinderItem = toCylinderContainer->getItemByIndex(toPos.getZ());
 			if (cylinderItem && cylinderItem->getID() == ITEM_GOLD_POUCH) {
 				containerID = ITEM_GOLD_POUCH;
+			}
+			if (cylinderItem && cylinderItem->getID() == ITEM_LOOT_POUCH) {
+				containerID = ITEM_LOOT_POUCH;
 			}
 		}
 
@@ -2153,22 +2153,13 @@ ReturnValue Game::checkMoveItemToCylinder(const std::shared_ptr<Player> &player,
 
 		if (toStoreInbox && !containerToStow) {
 			const bool isGoldPouch = item->getID() == ITEM_GOLD_POUCH;
-			const bool canMoveInStoreInbox = item->canBeMovedToStore() || isGoldPouch;
-			if (!canMoveInStoreInbox) {
-				return RETURNVALUE_NOTBOUGHTINSTORE;
-			}
-
-			// Store Inbox accepts only items already inside it (internal reordering).
-			if (!fromStoreInbox) {
+			const bool isLootPouch = item->getID() == ITEM_LOOT_POUCH;
+			if (!item->canBeMovedToStore() && !isGoldPouch && !isLootPouch) {
 				return RETURNVALUE_NOTBOUGHTINSTORE;
 			}
 		}
 
-		if (containerID == ITEM_GOLD_POUCH && !containerToStow) {
-			if (!fromStoreInbox) {
-				return RETURNVALUE_NOTBOUGHTINSTORE;
-			}
-
+		if ((containerID == ITEM_GOLD_POUCH || containerID == ITEM_LOOT_POUCH) && !containerToStow) {
 			if (g_configManager().getBoolean(TOGGLE_GOLD_POUCH_QUICKLOOT_ONLY)) {
 				return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 			}
@@ -2208,6 +2199,10 @@ ReturnValue Game::checkMoveItemToCylinder(const std::shared_ptr<Player> &player,
 			if (item->getID() == ITEM_GOLD_POUCH) {
 				isValidMoveItem = true;
 			}
+			
+			if (item->getID() == ITEM_LOOT_POUCH) {
+				isValidMoveItem = true;
+			}
 
 			if (!isValidMoveItem) {
 				return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
@@ -2220,7 +2215,7 @@ ReturnValue Game::checkMoveItemToCylinder(const std::shared_ptr<Player> &player,
 
 		if (item->getContainer() && !item->isStoreItem()) {
 			for (const std::shared_ptr<Item> &containerItem : item->getContainer()->getItems(true)) {
-				if (containerItem->isStoreItem() && !containerToStow && ((containerID != ITEM_GOLD_POUCH && containerID != ITEM_DEPOT && containerID != ITEM_STORE_INBOX) || (topParentContainer->getParent() && topParentContainer->getParent()->getContainer() && (!topParentContainer->getParent()->getContainer()->isDepotChest() || topParentContainer->getParent()->getContainer()->getID() != ITEM_STORE_INBOX)))) {
+				if (containerItem->isStoreItem() && !containerToStow && (((containerID != ITEM_GOLD_POUCH || containerID != ITEM_LOOT_POUCH) && containerID != ITEM_DEPOT && containerID != ITEM_STORE_INBOX) || (topParentContainer->getParent() && topParentContainer->getParent()->getContainer() && (!topParentContainer->getParent()->getContainer()->isDepotChest() || topParentContainer->getParent()->getContainer()->getID() != ITEM_STORE_INBOX)))) {
 					return RETURNVALUE_NOTPOSSIBLE;
 				}
 			}
@@ -4919,7 +4914,7 @@ std::shared_ptr<Item> Game::wrapItem(const std::shared_ptr<Item> &item, const st
 		newItem->setAttribute(ItemAttribute_t::AMOUNT, amount);
 	}
 
-	newItem->setAttribute(ItemAttribute_t::OWNER, item->getAttribute<uint16_t>(ItemAttribute_t::OWNER));
+	newItem->setAttribute(ItemAttribute_t::OWNER, item->getAttribute<uint32_t>(ItemAttribute_t::OWNER));
 	if (const int64_t storeAttribute = item->getAttribute<int64_t>(ItemAttribute_t::STORE); storeAttribute > 0) {
 		newItem->setAttribute(ItemAttribute_t::STORE, storeAttribute);
 	}
@@ -4939,7 +4934,7 @@ void Game::unwrapItem(const std::shared_ptr<Item> &item, uint16_t unWrapId, cons
 		return;
 	}
 
-	const uint16_t ownerAttr = item->getAttribute<uint16_t>(ItemAttribute_t::OWNER);
+	const uint32_t ownerAttr = item->getAttribute<uint32_t>(ItemAttribute_t::OWNER);
 	const int64_t storeAttr = item->getAttribute<int64_t>(ItemAttribute_t::STORE);
 	const uint16_t amountAttr = item->getAttribute<uint16_t>(ItemAttribute_t::AMOUNT);
 	const uint16_t amount = amountAttr ? amountAttr : 1;
