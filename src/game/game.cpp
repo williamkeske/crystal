@@ -2138,11 +2138,14 @@ ReturnValue Game::checkMoveItemToCylinder(const std::shared_ptr<Player> &player,
 		const auto rootToContainer = toCylinderContainer->getRootContainer();
 		const bool toStoreInbox = rootToContainer && rootToContainer->isStoreInbox();
 
-		// check the store inbox index if gold pouch forces it as containerID
+		// check the store inbox index if gold/loot pouch forces it as containerID
 		if (containerID == ITEM_STORE_INBOX) {
 			auto cylinderItem = toCylinderContainer->getItemByIndex(toPos.getZ());
 			if (cylinderItem && cylinderItem->getID() == ITEM_GOLD_POUCH) {
 				containerID = ITEM_GOLD_POUCH;
+			}
+			if (cylinderItem && cylinderItem->getID() == ITEM_LOOT_POUCH) {
+				containerID = ITEM_LOOT_POUCH;
 			}
 		}
 
@@ -2150,12 +2153,13 @@ ReturnValue Game::checkMoveItemToCylinder(const std::shared_ptr<Player> &player,
 
 		if (toStoreInbox && !containerToStow) {
 			const bool isGoldPouch = item->getID() == ITEM_GOLD_POUCH;
-			if (!item->canBeMovedToStore() && !isGoldPouch) {
+			const bool isLootPouch = item->getID() == ITEM_LOOT_POUCH;
+			if (!item->canBeMovedToStore() && !isGoldPouch && !isLootPouch) {
 				return RETURNVALUE_NOTBOUGHTINSTORE;
 			}
 		}
 
-		if (containerID == ITEM_GOLD_POUCH && !containerToStow) {
+		if ((containerID == ITEM_GOLD_POUCH || containerID == ITEM_LOOT_POUCH) && !containerToStow) {
 			if (g_configManager().getBoolean(TOGGLE_GOLD_POUCH_QUICKLOOT_ONLY)) {
 				return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 			}
@@ -2195,6 +2199,10 @@ ReturnValue Game::checkMoveItemToCylinder(const std::shared_ptr<Player> &player,
 			if (item->getID() == ITEM_GOLD_POUCH) {
 				isValidMoveItem = true;
 			}
+			
+			if (item->getID() == ITEM_LOOT_POUCH) {
+				isValidMoveItem = true;
+			}
 
 			if (!isValidMoveItem) {
 				return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
@@ -2207,7 +2215,7 @@ ReturnValue Game::checkMoveItemToCylinder(const std::shared_ptr<Player> &player,
 
 		if (item->getContainer() && !item->isStoreItem()) {
 			for (const std::shared_ptr<Item> &containerItem : item->getContainer()->getItems(true)) {
-				if (containerItem->isStoreItem() && !containerToStow && ((containerID != ITEM_GOLD_POUCH && containerID != ITEM_DEPOT && containerID != ITEM_STORE_INBOX) || (topParentContainer->getParent() && topParentContainer->getParent()->getContainer() && (!topParentContainer->getParent()->getContainer()->isDepotChest() || topParentContainer->getParent()->getContainer()->getID() != ITEM_STORE_INBOX)))) {
+				if (containerItem->isStoreItem() && !containerToStow && (((containerID != ITEM_GOLD_POUCH || containerID != ITEM_LOOT_POUCH) && containerID != ITEM_DEPOT && containerID != ITEM_STORE_INBOX) || (topParentContainer->getParent() && topParentContainer->getParent()->getContainer() && (!topParentContainer->getParent()->getContainer()->isDepotChest() || topParentContainer->getParent()->getContainer()->getID() != ITEM_STORE_INBOX)))) {
 					return RETURNVALUE_NOTPOSSIBLE;
 				}
 			}
