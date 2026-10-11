@@ -1423,6 +1423,12 @@ Item::getDescriptions(const ItemType &it, const std::shared_ptr<Item> &item /*= 
 			}
 
 			for (uint8_t i = SKILL_CRITICAL_HIT_CHANCE; i <= SKILL_LAST; i++) {
+				// Leech chance is 0-100 in combat (100 = always), but the look text divided it by 100
+				// ("life leech chance +1%"). Like the global game, show only the leech amount.
+				if (i == SKILL_LIFE_LEECH_CHANCE || i == SKILL_MANA_LEECH_CHANCE) {
+					continue;
+				}
+				
 				auto skill = item ? item->getSkill(static_cast<skills_t>(i)) : it.getSkill(static_cast<skills_t>(i));
 				if (!skill) {
 					continue;
@@ -1828,6 +1834,12 @@ Item::getDescriptions(const ItemType &it, const std::shared_ptr<Item> &item /*= 
 			}
 
 			for (uint8_t i = SKILL_CRITICAL_HIT_CHANCE; i <= SKILL_LAST; i++) {
+				// Leech chance is 0-100 in combat (100 = always), but the look text divided it by 100
+				// ("life leech chance +1%"). Like the global game, show only the leech amount.
+				if (i == SKILL_LIFE_LEECH_CHANCE || i == SKILL_MANA_LEECH_CHANCE) {
+					continue;
+				}
+				
 				auto skill = item ? item->getSkill(static_cast<skills_t>(i)) : it.getSkill(static_cast<skills_t>(i));
 				if (!skill) {
 					continue;
@@ -2313,6 +2325,12 @@ std::string Item::parseShowAttributesDescription(const std::shared_ptr<Item> &it
 			}
 
 			for (uint8_t i = SKILL_CRITICAL_HIT_CHANCE; i <= SKILL_LAST; i++) {
+				// Leech chance is 0-100 in combat (100 = always), but the look text divided it by 100
+				// ("life leech chance +1%"). Like the global game, show only the leech amount.
+				if (i == SKILL_LIFE_LEECH_CHANCE || i == SKILL_MANA_LEECH_CHANCE) {
+					continue;
+				}
+				
 				const auto skill = item ? item->getSkill(static_cast<skills_t>(i)) : itemType.getSkill(static_cast<skills_t>(i));
 				if (!skill) {
 					continue;
@@ -2611,6 +2629,12 @@ std::string Item::getDescription(const ItemType &it, int32_t lookDistance, const
 				}
 
 				for (uint8_t i = SKILL_CRITICAL_HIT_CHANCE; i <= SKILL_LAST; i++) {
+					// Leech chance is 0-100 in combat (100 = always), but the look text divided it by 100
+					// ("life leech chance +1%"). Like the global game, show only the leech amount.
+					if (i == SKILL_LIFE_LEECH_CHANCE || i == SKILL_MANA_LEECH_CHANCE) {
+						continue;
+					}
+				
 					auto skill = item ? item->getSkill(static_cast<skills_t>(i)) : it.getSkill(static_cast<skills_t>(i));
 					if (!skill) {
 						continue;
@@ -2894,6 +2918,12 @@ std::string Item::getDescription(const ItemType &it, int32_t lookDistance, const
 				}
 
 				for (uint8_t i = SKILL_CRITICAL_HIT_CHANCE; i <= SKILL_LAST; i++) {
+					// Leech chance is 0-100 in combat (100 = always), but the look text divided it by 100
+					// ("life leech chance +1%"). Like the global game, show only the leech amount.
+					if (i == SKILL_LIFE_LEECH_CHANCE || i == SKILL_MANA_LEECH_CHANCE) {
+						continue;
+					}
+					
 					auto skill = item ? item->getSkill(static_cast<skills_t>(i)) : it.getSkill(static_cast<skills_t>(i));
 					if (!skill) {
 						continue;
