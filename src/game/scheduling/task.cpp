@@ -27,7 +27,7 @@ Task::Task(uint32_t expiresAfterMs, std::function<void(void)> &&f, std::string_v
 	func(std::move(f)), context(context), utime(OTSYS_TIME()),
 	expiration(expiresAfterMs > 0 ? OTSYS_TIME() + expiresAfterMs : 0) {
 	if (this->context.empty()) {
-		g_logger().error("[{}]: task context cannot be empty!", __FUNCTION__);
+		// g_logger().error("[{}]: task context cannot be empty!", __FUNCTION__);
 		return;
 	}
 
@@ -38,7 +38,7 @@ Task::Task(std::function<void(void)> &&f, std::string_view context, uint32_t del
 	func(std::move(f)), context(context), utime(OTSYS_TIME() + delay), delay(delay),
 	cycle(cycle), log(log) {
 	if (this->context.empty()) {
-		g_logger().error("[{}]: task context cannot be empty!", __FUNCTION__);
+		// g_logger().error("[{}]: task context cannot be empty!", __FUNCTION__);
 		return;
 	}
 
