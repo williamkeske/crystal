@@ -1429,7 +1429,7 @@ Item::getDescriptions(const ItemType &it, const std::shared_ptr<Item> &item /*= 
 				if (i == SKILL_LIFE_LEECH_CHANCE || i == SKILL_MANA_LEECH_CHANCE) {
 					continue;
 				}
-				
+
 				auto skill = item ? item->getSkill(static_cast<skills_t>(i)) : it.getSkill(static_cast<skills_t>(i));
 				if (!skill) {
 					continue;
@@ -1840,7 +1840,7 @@ Item::getDescriptions(const ItemType &it, const std::shared_ptr<Item> &item /*= 
 				if (i == SKILL_LIFE_LEECH_CHANCE || i == SKILL_MANA_LEECH_CHANCE) {
 					continue;
 				}
-				
+
 				auto skill = item ? item->getSkill(static_cast<skills_t>(i)) : it.getSkill(static_cast<skills_t>(i));
 				if (!skill) {
 					continue;
@@ -2331,7 +2331,7 @@ std::string Item::parseShowAttributesDescription(const std::shared_ptr<Item> &it
 				if (i == SKILL_LIFE_LEECH_CHANCE || i == SKILL_MANA_LEECH_CHANCE) {
 					continue;
 				}
-				
+
 				const auto skill = item ? item->getSkill(static_cast<skills_t>(i)) : itemType.getSkill(static_cast<skills_t>(i));
 				if (!skill) {
 					continue;
@@ -2635,7 +2635,7 @@ std::string Item::getDescription(const ItemType &it, int32_t lookDistance, const
 					if (i == SKILL_LIFE_LEECH_CHANCE || i == SKILL_MANA_LEECH_CHANCE) {
 						continue;
 					}
-				
+
 					auto skill = item ? item->getSkill(static_cast<skills_t>(i)) : it.getSkill(static_cast<skills_t>(i));
 					if (!skill) {
 						continue;
@@ -2924,7 +2924,7 @@ std::string Item::getDescription(const ItemType &it, int32_t lookDistance, const
 					if (i == SKILL_LIFE_LEECH_CHANCE || i == SKILL_MANA_LEECH_CHANCE) {
 						continue;
 					}
-					
+
 					auto skill = item ? item->getSkill(static_cast<skills_t>(i)) : it.getSkill(static_cast<skills_t>(i));
 					if (!skill) {
 						continue;
