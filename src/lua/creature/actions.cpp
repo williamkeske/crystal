@@ -518,6 +518,8 @@ ReturnValue Actions::internalUseItem(const std::shared_ptr<Player> &player, cons
 			if (reward->empty()) {
 				return RETURNVALUE_REWARDCONTAINERISEMPTY;
 			}
+			// Open the player's personal reward container instead of the shared corpse
+			openContainer = reward;
 		} else if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
 			return RETURNVALUE_YOUARENOTTHEOWNER;
 		}
